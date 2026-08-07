@@ -1,13 +1,10 @@
 import mongoose from "mongoose";
 
 const connectDB = (URI) => {
-    try {
-        mongoose.connect(URI);
+    // Return the mongoose.connect promise so callers can chain .then/.catch
+    return mongoose.connect(URI).then(() => {
         console.log("✅ MongoDB connected!");
-    } catch (err) {
-        console.log("MONGODB connection ERROR!! - ", err);
-        process.exit(1);
-    }
+    });
 }
 
 export default connectDB;

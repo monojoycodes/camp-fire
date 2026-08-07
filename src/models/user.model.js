@@ -64,15 +64,18 @@ const userSchema = new Schema(
 })
 
 // Hash password before saving
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+userSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
   this.password = await bcrypt.hash(this.password, 12);
-  next();
 });
 
 userSchema.methods.isPasswordCorrect = async function(password) {
-    return await bcrypt.compare(password, this.password);
-} 
+  if (!this.password) return false;
+  // Coerce both values to strings to avoid bcrypt "data and hash must be strings" errors
+  const plain = typeof password === 'string' ? password : String(password);
+  const hash = typeof this.password === 'string' ? this.password : String(this.password);
+  return await bcrypt.compare(plain, hash);
+}
 
 //let us generate tokens!
 // JWT : jwt.sign(payload, secret, expiry)
