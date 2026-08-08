@@ -29,4 +29,15 @@ app.use(cors(
 app.use("/api/v1/healthcheck", healthCheckRouter)
 app.use("/api/v1/auth", authRouter)
 
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "Something went wrong";
+
+    res.status(statusCode).json({
+        success: false,
+        message,
+        errors: err.errors || [],
+    });
+})
+
 export default app;
