@@ -7,7 +7,7 @@ import {ApiError} from "../utils/api-error.js"
 
 const router = Router();
 
-//syntax: (validator(), middleware, method): 
+//syntax: (validator(), middleware, method) ->
 // Q) why is validator method called and midle method is simply passed as a reference?
 router.post("/register", userRegisterValidator(), validate, register);
 
