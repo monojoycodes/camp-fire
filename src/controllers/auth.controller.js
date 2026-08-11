@@ -4,6 +4,12 @@ import { ApiResponse } from "../utils/api-response.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { emailVerificationTemplate, sendEmail } from "../utils/mail.js";
 
+//options for cookies:
+const options = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+    };
+
 // Generate Tokens
 const generateAccessAndRefreshToken = async (userId) => {
 
@@ -92,10 +98,6 @@ const login = asyncHandler( async (req, res) => {
         "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
     );
 
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-    };
 
     return res.status(200)
         .cookie("accessToken", accessToken, options)
@@ -113,6 +115,31 @@ const login = asyncHandler( async (req, res) => {
         );
 })
 
-export {register, 
+const logout = asyncHandler((req, res) => {
+    const logoutUser = req.user._id;
+    User.findByIdAndUpdate(
+        logoutUser._id,
+        {
+            $set: {
+                refreshToken: "",
+            },
+        },
+            {
+                new: true, //store the most recent object to the DB.
+            },
+    );
+
+    return res
+           .status(200)
+           .clearCookie("accessToken", options)
+           .clearCookie("refreshToken", options)
+           .json(
+            new ApiResponse(200, {}, "User logged out successfully!")
+           )
+
+});
+
+export { register, 
         generateAccessAndRefreshToken,
-        login}
+        login,
+        logout }

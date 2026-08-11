@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
     status: 'all good!',
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
-    quote: "Working hard for you is always the right choice."
+    quote: "Working hard for yourself is always the right choice."
   });
 });
 
