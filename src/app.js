@@ -6,6 +6,8 @@ import authRouter from "./routes/auth.routes.js"
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 // If you forget this line or place it after your route definitions, req.body will be undefined. If you try to destructure const { email, password } = req.body; in your /register route without this middleware, your server will throw a TypeError and crash. It must always be placed before your routes.
 
 //setup express to be able to make POST requests

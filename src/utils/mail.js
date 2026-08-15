@@ -101,3 +101,21 @@ export const resetPasswordTemplate = (username, resetUrl) => {
     }
   });
 };
+
+export const passwordResetEmailTemplate = (username, resetUrl) => {
+  return mailGenerator.generate({
+    body: {
+      name: username,
+      intro: "We received a request to reset your Camp Fire password.",
+      action: {
+        instructions: "Use the link below to set a new password. This link expires in 20 minutes:",
+        button: {
+          color: "#E04A3F",
+          text: "Set New Password",
+          link: resetUrl
+        }
+      },
+      outro: "If you did not request this reset, you can safely ignore this email."
+    }
+  });
+};

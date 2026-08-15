@@ -59,7 +59,7 @@ const userSchema = new Schema(
         type: String
     },
     emailVerificationExpiry: {
-        type: String
+        type: Date
     }
 })
 
